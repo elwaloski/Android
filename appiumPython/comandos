@@ -1,0 +1,6 @@
+Reporte normal
+ pytest xiaomi.py --html=reporte.html --self-contained-html
+
+Allure
+pytest xiaomiAllure.py --alluredir=reportes_allure
+allure serve reportes_allure
