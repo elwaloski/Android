@@ -1,8 +1,10 @@
 import pytest
+import allure
 from appium import webdriver
 from appium.options.android import UiAutomator2Options
 import time
 import datetime
+
 
 @pytest.fixture
 def driver():
@@ -10,7 +12,7 @@ def driver():
         "platformName": "Android",
         "automationName": "UiAutomator2",
         #"deviceName": "Xiaomi",
-        #"udid": "scso7txwh6lrjbqs",
+        "udid": "scso7txwh6lrjbqs",
         "deviceName": "Xiaomi-Wifi",
         #"udid": "adb-scso7txwh6lrjbqs-xPSg8r._adb-tls-connect._tcp", 
         #"udid":"emulator-5554"
@@ -37,5 +39,14 @@ def pytest_runtest_makereport(item, call):
         if driver:
             timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
             nombre = f"FAILED_{item.name}_{timestamp}.png"
+
             driver.save_screenshot(nombre)
-            print(f"[ERROR] Screenshot guardado: {nombre}")
+
+            # 🔥 ADJUNTAR A ALLURE
+            allure.attach.file(
+                nombre,
+                name=f"Screenshot - {item.name}",
+                attachment_type=allure.attachment_type.PNG
+            )
+
+            print(f"[ERROR] Screenshot guardado y adjuntado a Allure: {nombre}")
